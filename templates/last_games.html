@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #242429;
+            color: #ffffff;
+            font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            width: 880px;
+        }
+        .day-group {
+            margin-bottom: 10px;
+        }
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #2d2d3a;
+        }
+        .day-header h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .day-stats {
+            display: flex;
+            gap: 10px;
+            font-size: 14px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+        }
+        .day-stats .wins { background-color: rgba(59, 130, 246, 0.2); color: #60a5fa; padding: 4px 10px; border-radius: 12px; }
+        .day-stats .losses { background-color: rgba(239, 68, 68, 0.2); color: #f87171; padding: 4px 10px; border-radius: 12px; }
+        
+        .match-row {
+            display: flex;
+            align-items: center;
+            height: 90px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            padding: 0 15px;
+        }
+        .match-row.win { background: linear-gradient(90deg, #2b4c7e 0%, #1a2c4e 100%); box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .match-row.loss { background: linear-gradient(90deg, #7a2b34 0%, #4a191f 100%); box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        
+        .col-game-info {
+            width: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 2px;
+        }
+        .outcome-text { font-size: 14px; font-weight: 800; text-transform: uppercase; }
+        .outcome-text.win { color: #60a5fa; }
+        .outcome-text.loss { color: #f87171; }
+        .team-score { font-size: 12px; font-weight: bold; color: #d1d5db; }
+        .duration { font-size: 12px; font-weight: bold; color: #9ca3af; }
+        .game-mode-badge {
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background-color: rgba(0,0,0,0.4);
+            color: #d1d5db;
+            margin-top: 2px;
+        }
+        
+        .col-champ {
+            position: relative;
+            width: 55px;
+            height: 55px;
+            margin: 0 45px 0 -15px;
+        }
+        .col-champ img.main-champ {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            position: relative;
+            z-index: 2;
+        }
+        .col-champ img.opponent-champ {
+            position: absolute;
+            top: 0px;
+            right: -25px;
+            width: 35px;
+            height: 35px;
+            border-radius: 2px;
+            filter: grayscale(100%);
+            opacity: 0.85;
+            z-index: 1;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .level {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            background: #111;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 4px;
+            border-radius: 4px;
+            border: 1px solid #3d3d52;
+            z-index: 3;
+        }
+        .col-champ-info {
+            width: 80px;
+            display: flex;
+            align-items: center;
+            margin-left: 5px;
+        }
+        .champ-name-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .champ-name { font-size: 14px; font-weight: bold; color: #ffffff; }
+        .champ-lane-icon { width: 18px; height: 18px; filter: invert(1) brightness(1000%); opacity: 1; }
+        
+        .col-kda {
+            width: 130px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        .kda-text {
+            font-size: 20px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+        }
+        .kda-text .d { color: #ef4444; }
+        .kda-text .slash { color: #6b7280; font-size: 15px; font-weight: normal; }
+
+        
+        .col-stats {
+            width: 70px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            font-size: 12px;
+            color: #9ca3af;
+        }
+        .col-stats .kda-ratio { font-weight: bold; color: #f3f4f6; }
+        
+        .col-spells-runes {
+            display: flex;
+            gap: 4px;
+            margin: 0 15px;
+        }
+        .col-2 {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 4px;
+            background-color: #111;
+        }
+        .icon img { width: 100%; height: 100%; border-radius: 4px; }
+        
+        .col-items {
+            display: flex;
+            gap: 4px;
+            margin-left: 15px;
+            align-items: center;
+            flex-grow: 1;
+        }
+        .item-slot {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            background-color: rgba(0,0,0,0.3);
+        }
+        .item-slot img {
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+        }
+        .trinket {
+            border-radius: 50% !important;
+        }
+    </style>
+</head>
+<body>
+    {% for day, data in days.items() %}
+    <div class="day-group">
+        <div class="day-header">
+            <h2 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 24px;">{{ day }}</h2>
+        </div>
+        
+        {% for match in data.matches %}
+        <div class="match-row {{ 'win' if match.win else 'loss' }}">
+            <div class="col-game-info">
+                <div class="outcome-text {{ 'win' if match.win else 'loss' }}">{{ match.victory_text }}</div>
+                <div class="team-score">{{ match.team_kills }} - {{ match.enemy_kills }}</div>
+                <div class="duration">{{ match.duration }}</div>
+                <div class="game-mode-badge">{{ match.game_mode }}</div>
+            </div>
+            
+            <div class="col-champ">
+                {% if match.opponent_url %}
+                <img class="opponent-champ" src="{{ match.opponent_url }}">
+                {% endif %}
+                <img class="main-champ" src="{{ match.champ_url }}" alt="{{ match.champion }}">
+                <div class="level">{{ match.level }}</div>
+            </div>
+            
+            <div class="col-champ-info">
+                <div class="champ-name-row">
+                    <div class="champ-name">{{ match.champion }}</div>
+                    {% if match.lane_icon_url %}
+                    <img class="champ-lane-icon" src="{{ match.lane_icon_url }}" alt="{{ match.lane }}">
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="col-kda">
+                <div class="kda-text">
+                    {{ match.kills }} <span class="slash">/</span> <span class="d">{{ match.deaths }}</span> <span class="slash">/</span> {{ match.assists }}
+                </div>
+            </div>
+            
+            <div class="col-stats">
+                <div class="kda-ratio">{{ match.kda_ratio }} KDA</div>
+                <div>{{ match.cs_min }} CS/m</div>
+                <div>{{ match.kp }}% KP</div>
+            </div>
+            
+            <div class="col-spells-runes">
+                <div class="col-2">
+                    <div class="icon">{% if match.spell1 %}<img src="{{ match.spell1 }}">{% endif %}</div>
+                    <div class="icon">{% if match.spell2 %}<img src="{{ match.spell2 }}">{% endif %}</div>
+                </div>
+                <div class="col-2">
+                    <div class="icon">{% if match.rune1 %}<img src="{{ match.rune1 }}">{% endif %}</div>
+                    <div class="icon">{% if match.rune2 %}<img src="{{ match.rune2 }}">{% endif %}</div>
+                </div>
+            </div>
+            
+            <div class="col-items">
+                {% for item in match.inventory[:6] %}
+                <div class="item-slot">{% if item %}<img src="{{ item }}">{% endif %}</div>
+                {% endfor %}
+                <div class="item-slot">
+                    {% if match.inventory[6] %}<img src="{{ match.inventory[6] }}" class="trinket" style="border-radius: 50%;">{% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</body>
+</html>
