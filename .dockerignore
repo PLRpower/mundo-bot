@@ -1,0 +1,14 @@
+.git
+.idea
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.env
+.env.example
+colleagues.json
+colleagues.example.json
+*.md
+.venv
+venv
+scratch*

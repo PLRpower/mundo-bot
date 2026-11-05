@@ -34,6 +34,7 @@ class MundoStatsBot(commands.Bot):
         await self.load_extension("cogs.admin")
         await self.load_extension("cogs.economy")
         await self.load_extension("cogs.randomizer")
+        await self.load_extension("cogs.deskbird")
         
         # Enregistrement des vues persistantes
         from cogs.roles import RoleSetupView

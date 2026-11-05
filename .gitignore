@@ -13,6 +13,9 @@ env/
 mundo_stats.db
 mundo_stats.db-journal
 
+# Deskbird
+colleagues.json
+
 # IDEs
 .idea/
 .vscode/

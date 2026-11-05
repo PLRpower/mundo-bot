@@ -1,0 +1,24 @@
+services:
+  mundo-bot:
+    image: ghcr.io/plrpower/mundo-bot:latest
+    container_name: mundo-bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./mundo_stats.db:/app/mundo_stats.db
+      - ./colleagues.json:/app/colleagues.json:ro
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DOCKER_API_VERSION=1.44
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_LABEL_ENABLE=true
+      - WATCHTOWER_POLL_INTERVAL=300
