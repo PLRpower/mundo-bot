@@ -67,6 +67,8 @@ class DeskbirdCog(commands.Cog):
         name="planning",
         description="Affiche le planning Deskbird de la semaine pour un collègue."
     )
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     @app_commands.describe(nom="Nom du collègue")
     @app_commands.autocomplete(nom=nom_autocomplete)
     async def planning(self, interaction: discord.Interaction, nom: str):
